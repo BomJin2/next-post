@@ -1,5 +1,6 @@
 "use client";
 
+import { supabase } from "@/utils/supabase";
 import { useState } from "react";
 
 type PostType = {
@@ -31,8 +32,15 @@ function NewPost({ onClose, onAddPost }: Props) {
     onAddPost(postData);
     onClose();
   };
+
+  const addPostHandler = async () => {
+    const { data, error } = await supabase
+      .from("Post")
+      .insert([{ Text: postText, Name: postName }])
+      .select();
+  };
   return (
-    <form className="flex flex-col w-[400px] bg-purple-500 py-[40px] px-[20px] gap-4" onClick={(e) => e.stopPropagation()} onSubmit={submitHandler}>
+    <form className="flex flex-col w-[400px] bg-purple-500 py-[40px] px-[20px] gap-4" onClick={(e) => e.stopPropagation()} onSubmit={addPostHandler}>
       <div>
         <div className="flex flex-col">
           <label htmlFor="text" className="text-white text-[28px]">
