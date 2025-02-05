@@ -9,12 +9,12 @@ type PostType = {
 };
 type Props = {
   onClose: () => void;
-  onAddPost: (postData: PostType) => void;
 };
 
-function NewPost({ onClose, onAddPost }: Props) {
+function NewPost({ onClose }: Props) {
   const [postText, setPostText] = useState<string | undefined>();
   const [postName, setPostName] = useState<string | undefined>();
+  const [posts, setPosts] = useState<PostType[]>([]);
 
   const textChangeHandler = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setPostText(e.target.value);
@@ -23,21 +23,23 @@ function NewPost({ onClose, onAddPost }: Props) {
     setPostName(e.target.value);
   };
 
-  const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const postData = {
-      Text: postText,
-      Name: postName,
-    };
-    onAddPost(postData);
-    onClose();
-  };
+  // const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
+  //   e.preventDefault();
+  //   const postData = {
+  //     Text: postText,
+  //     Name: postName,
+  //   };
+  //   onAddPost(postData);
+  //   onClose();
+  // };
 
-  const addPostHandler = async () => {
-    const { data, error } = await supabase
+  const addPostHandler = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const { data, status, error } = await supabase
       .from("Post")
       .insert([{ Text: postText, Name: postName }])
       .select();
+    onClose();
   };
   return (
     <form className="flex flex-col w-[400px] bg-purple-500 py-[40px] px-[20px] gap-4" onClick={(e) => e.stopPropagation()} onSubmit={addPostHandler}>
