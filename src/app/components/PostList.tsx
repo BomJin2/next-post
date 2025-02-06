@@ -13,6 +13,7 @@ type Props = {
 type PostType = {
   Text: string;
   Name: string;
+  PostId: string;
 };
 
 function PostList({ isPosting, onClose }: Props) {
@@ -39,8 +40,8 @@ function PostList({ isPosting, onClose }: Props) {
       )}
 
       <div className="grid grid-cols-3 gap-4">
-        {posts.map((post, index) => (
-          <PostItem postText={post.Text} postName={post.Name} />
+        {posts.map((post) => (
+          <PostItem postText={post.Text} postName={post.Name} key={post.PostId} postId={post.PostId} />
         ))}
       </div>
     </div>
